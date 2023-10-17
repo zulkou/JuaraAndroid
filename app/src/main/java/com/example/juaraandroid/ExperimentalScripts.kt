@@ -331,15 +331,135 @@ class FoldablePhone(var isFolded: Boolean = true): Phone() {
 //}
 
 // 7. Special auction
-fun main() {
-    val winningBid = Bid(5000, "Private Collector")
-
-    println("Item A is sold at ${auctionPrice(winningBid, 2000)}.")
-    println("Item B is sold at ${auctionPrice(null, 3000)}.")
-}
+//fun main() {
+//    val winningBid = Bid(5000, "Private Collector")
+//
+//    println("Item A is sold at ${auctionPrice(winningBid, 2000)}.")
+//    println("Item B is sold at ${auctionPrice(null, 3000)}.")
+//}
 
 class Bid(val amount: Int, val bidder: String)
 
 fun auctionPrice(bid: Bid?, minimumPrice: Int): Int {
     return bid?.amount ?: minimumPrice
+}
+
+// Quiz Logic
+class FillInTheBlankQuestion(
+    val questionText: String,
+    val answer: String,
+    val difficulty: String
+)
+class TrueOrFalseQuestion(
+    val questionText: String,
+    val answer: Boolean,
+    val difficulty: String
+)
+class NumericQuestion(
+    val questionText: String,
+    val answer: Int,
+    val difficulty: String
+)
+data class Question<T>(
+    val questionText: String,
+    val answer: T,
+    val difficulty: Difficulty
+)
+enum class Difficulty {
+    EASY, MEDIUM, HARD
+}
+interface ProgressPrintable {
+    val progressText: String
+    fun printProgressBar()
+}
+class Quiz {
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+
+    companion object StudentProgress {
+        var total: Int = 10
+        var answered: Int = 3
+    }
+    val progressText: String
+        get() = "${answered} of ${total} answered"
+    fun printProgressBar() {
+        repeat(Quiz.answered) { print("▓") }
+        repeat(Quiz.total - Quiz.answered) { print("▒") }
+        println()
+        println(progressText)
+    }
+    fun printQuiz() {
+        question1.let {
+            println(it.questionText)
+            println(it.answer)
+            println(it.difficulty)
+        }
+        println()
+        question2.let {
+            println(it.questionText)
+            println(it.answer)
+            println(it.difficulty)
+        }
+        println()
+        question3.let {
+            println(it.questionText)
+            println(it.answer)
+            println(it.difficulty)
+        }
+        println()
+    }
+}
+
+//fun main() {
+//    Quiz().apply {
+//        printQuiz()
+//    }
+//}
+
+//Task 1
+data class Event(
+    val title: String,
+    val description: String? = null,
+    val daypart: Daypart,
+    val durationInMinutes: Int,
+)
+enum class Daypart {
+    MORNING, AFTERNOON, EVENING
+}
+
+class ToDoEvent() {
+    val event1 = Event(title = "Wake up", description = "Time to get up", daypart = Daypart.MORNING, durationInMinutes = 0)
+    val event2 = Event(title = "Eat breakfast", daypart = Daypart.MORNING, durationInMinutes = 15)
+    val event3 = Event(title = "Learn about Kotlin", daypart = Daypart.AFTERNOON, durationInMinutes = 30)
+    val event4 = Event(title = "Practice Compose", daypart = Daypart.AFTERNOON, durationInMinutes = 60)
+    val event5 = Event(title = "Watch latest DevBytes video", daypart = Daypart.AFTERNOON, durationInMinutes = 10)
+    val event6 = Event(title = "Check out latest Android Jetpack library", daypart = Daypart.EVENING, durationInMinutes = 45)
+
+    val events = mutableListOf<Event>(event1, event2, event3, event4, event5, event6)
+
+    val shortEvents = events.filter { it.durationInMinutes < 60 }
+
+    val groupedEvents = events.groupBy { it.daypart }
+
+    val durationOfEvent = if (events[0].durationInMinutes < 60) {
+        "short"
+    } else {
+        "long"
+    }
+    fun toDoEventClassPrint() {
+        println("You have ${shortEvents.size} short events.")
+
+        groupedEvents.forEach { (daypart, events) ->
+            println("$daypart: ${events.size} events")
+        }
+
+        println("Last event of the day: ${events.last().title}")
+
+        println("Duration of first event of the day: $durationOfEvent")
+    }
+}
+
+fun main() {
+
 }
